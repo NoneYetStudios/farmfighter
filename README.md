@@ -142,3 +142,9 @@ Run the included zero-dependency Python server:
 python server.py
 # Open http://localhost:8080 in your browser
 ```
+
+---
+
+## License
+
+MIT License © 2026 Anthony Moore / None Yet Studios
