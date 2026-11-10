@@ -1,0 +1,36 @@
+# Python cache & virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# SQLite databases & temp journals (auto-created at runtime by PHP / Python)
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+data/*.sqlite
+data/*.sqlite3
+data/*.db
+data/*.db-wal
+data/*.db-shm
+!data/.htaccess
+
+# Logs and runtime artifacts
+*.log
+.system_generated/
+tmp/
+temp/
+
+# OS metadata & Editor configurations
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace

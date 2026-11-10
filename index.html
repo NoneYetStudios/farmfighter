@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>FARM FIGHTER IV — Championship Edition | STF Arcade</title>
+  <meta
+    name="description"
+    content="FARM FIGHTER IV — The fourth installment of the prestigious barnyard fighting tournament. Choose Cluck Norris, Moo Tai, Ham Solo, Billy the Kid, Woolverine, or Quackie Chan!"
+  />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- ================= TOP NAVIGATION BAR WITH MANDATORY STF ARCADE LINK ================= -->
+  <header class="top-nav" role="banner">
+    <div class="nav-left">
+      <a
+        href="https://stabthefinger.com/stfarcade.html"
+        class="stf-arcade-btn"
+        id="stfArcadeLink"
+        title="Back to STF Arcade"
+      >
+        ◀ STF ARCADE
+      </a>
+      <button type="button" class="brand-title-btn" id="btn-home-title" title="Return to Fighter Select">
+        <span class="brand-badge">IV</span>
+        <span class="brand-name">FARM FIGHTER IV</span>
+        <span class="brand-sub hide-sm">CHAMPIONSHIP EDITION</span>
+      </button>
+    </div>
+
+    <div class="nav-right">
+      <button type="button" class="nav-btn" id="btn-open-bios" title="Fighter Bios & Move Lists">
+        📜 <span class="hide-xs">Fighter Bios</span>
+      </button>
+      <button type="button" class="nav-btn" id="btn-open-controls" title="Desktop & Mobile Controls">
+        🕹️ <span class="hide-xs">Controls</span>
+      </button>
+      <button type="button" class="nav-btn nav-btn-gold" id="btn-open-leaderboards" title="Global SQLite Leaderboards">
+        🏆 <span class="hide-xs">Leaderboards</span>
+      </button>
+      <button type="button" class="nav-btn" id="btn-toggle-sound" aria-pressed="false" title="Toggle Arcade Audio">
+        🔊 <span class="hide-xs" id="sound-label">Sound: ON</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <!-- =========================================================================
+         SCREEN 1: MODE, CHARACTER & ARENA SELECT SCREEN
+         ========================================================================= -->
+    <section id="screen-select" class="screen-panel active" aria-label="Character and Mode Selection">
+      <!-- Top Marquee / Player Profile Bar -->
+      <div class="tournament-marquee">
+        <div class="marquee-left">
+          <span class="marquee-tag">INTERNATIONAL BARNYARD COMBAT FEDERATION • REV 4.02</span>
+          <h1 class="marquee-title">FARM FIGHTER <span class="num-iv">IV</span></h1>
+          <p class="marquee-subtitle">
+            Eight prestigious agricultural grandmasters. Five unsanctioned arenas. One giant red button nobody is supposed to press.
+          </p>
+        </div>
+
+        <div class="player-profile-card">
+          <label for="input-player-name" class="profile-label">
+            🏷️ CONTENDER HANDLE <small>(Saved for Global Leaderboards)</small>
+          </label>
+          <div class="profile-input-row">
+            <input
+              type="text"
+              id="input-player-name"
+              maxlength="20"
+              placeholder="Enter Arcade Name"
+              autocomplete="off"
+            />
+            <button type="button" class="btn-small" id="btn-random-name" title="Random Fighter Handle">🎲</button>
+          </div>
+          <div class="profile-pref-row">
+            <label class="auto-save-toggle" for="toggle-auto-save">
+              <input type="checkbox" id="toggle-auto-save" checked />
+              <span>Auto Save Scores to Global Leaderboards</span>
+            </label>
+          </div>
+          <div class="local-best-strip" id="local-best-strip">
+            Best Arcade: <strong>0</strong> • Best Survival Streak: <strong>0</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1. Game Mode Selector -->
+      <div class="select-block">
+        <div class="block-header">
+          <h2 class="block-title">1. SELECT TOURNAMENT MODE</h2>
+          <span class="block-hint" id="mode-active-hint">Fight through all 8 challengers &amp; submit to Global Leaderboards!</span>
+        </div>
+        <div class="modes-grid" id="modes-grid" role="radiogroup" aria-label="Game Modes">
+          <button type="button" class="mode-card active" data-mode="arcade" role="radio" aria-checked="true">
+            <div class="mode-icon">🏆</div>
+            <div class="mode-info">
+              <strong>ARCADE MODE</strong>
+              <span>Fight through the 8-animal roster. Track Score &amp; Best Time on Global Leaderboards.</span>
+            </div>
+          </button>
+
+          <button type="button" class="mode-card" data-mode="survival" role="radio" aria-checked="false">
+            <div class="mode-icon">🔥</div>
+            <div class="mode-info">
+              <strong>SURVIVAL MODE</strong>
+              <span>Endless challengers! Track Wins, KOs &amp; Longest Streak on Global Leaderboards.</span>
+            </div>
+          </button>
+
+          <button type="button" class="mode-card" data-mode="training" role="radio" aria-checked="false">
+            <div class="mode-icon">🥋</div>
+            <div class="mode-info">
+              <strong>TRAINING MODE</strong>
+              <span>Spar with a passive or counter-attacking opponent. Practice combos &amp; specials.</span>
+            </div>
+          </button>
+
+          <button type="button" class="mode-card hide-mobile" data-mode="versus" role="radio" aria-checked="false">
+            <div class="mode-icon">⚔️</div>
+            <div class="mode-info">
+              <strong>LOCAL VERSUS (2P)</strong>
+              <span>Two human players on the same keyboard! P1 (WASD + F/G/H) vs P2 (Arrows + 1/2/3).</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. Character Roster & Live Matchup Preview -->
+      <div class="roster-and-preview-grid">
+        <div class="select-block roster-block">
+          <div class="block-header">
+            <h2 class="block-title">2. CHOOSE YOUR FIGHTER</h2>
+            <div class="select-target-toggle" id="p2-select-toggle-wrap">
+              <button type="button" class="target-pill active" id="btn-selecting-p1">Picking: P1</button>
+              <button type="button" class="target-pill" id="btn-selecting-p2">Picking: Opponent / P2</button>
+            </div>
+          </div>
+
+          <div class="roster-grid" id="roster-grid" role="listbox" aria-label="Character Roster">
+            <!-- Populated dynamically from FIGHTERS in main.js -->
+          </div>
+        </div>
+
+        <!-- Selected Fighter Details & Specials Card -->
+        <aside class="fighter-dossier-card" id="fighter-dossier-card" aria-live="polite">
+          <!-- Dynamically populated with P1 & P2 matchup, quote, specials, and DO NOT PRESS preview -->
+        </aside>
+      </div>
+
+      <!-- 3. Arena Selection & Start Button -->
+      <div class="select-block arena-block">
+        <div class="block-header">
+          <h2 class="block-title">3. SELECT COMBAT ARENA</h2>
+          <span class="block-hint" id="arena-hazard-hint">Classic championship timber arena.</span>
+        </div>
+        <div class="arenas-grid" id="arenas-grid" role="radiogroup" aria-label="Combat Arenas">
+          <!-- Populated dynamically from ARENAS in main.js -->
+        </div>
+      </div>
+
+      <div class="start-cta-bar">
+        <button type="button" class="btn-start-fight" id="btn-start-fight">
+          <span class="start-main">🥊 ENTER THE RING — CLOBBERING COMMENCES!</span>
+          <span class="start-sub" id="start-btn-sub">ARCADE TOURNAMENT • STAGE 1 OF 6</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SCREEN 2: VS SCREEN & RIDICULOUS LOADING TIPS
+         ========================================================================= -->
+    <section id="screen-vs" class="screen-panel" aria-label="Versus Matchup Screen" hidden>
+      <div class="vs-card">
+        <div class="vs-stage-header">
+          <span class="vs-stage-badge" id="vs-stage-badge">ARCADE MODE • MATCH 1 OF 6</span>
+          <h2 class="vs-arena-title" id="vs-arena-title">Arena: The Barn</h2>
+        </div>
+
+        <div class="vs-combatants-row">
+          <div class="vs-fighter-panel vs-p1">
+            <div class="vs-portrait" id="vs-p1-portrait"></div>
+            <div class="vs-fighter-meta">
+              <span class="vs-player-tag">PLAYER 1</span>
+              <h3 id="vs-p1-name">Cluck Norris</h3>
+              <p class="vs-quote" id="vs-p1-quote">"The barnyard life chose him."</p>
+            </div>
+          </div>
+
+          <div class="vs-emblem-center">
+            <div class="vs-burst">VS</div>
+          </div>
+
+          <div class="vs-fighter-panel vs-p2">
+            <div class="vs-portrait" id="vs-p2-portrait"></div>
+            <div class="vs-fighter-meta">
+              <span class="vs-player-tag" id="vs-p2-tag">CHALLENGER</span>
+              <h3 id="vs-p2-name">Moo Tai</h3>
+              <p class="vs-quote" id="vs-p2-quote">"Pain is temporary. Hay is forever."</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="vs-tip-box">
+          <span class="tip-label">📜 OFFICIAL TOURNAMENT ARCHIVE TIP</span>
+          <p class="tip-text" id="vs-tip-text">
+            "TOURNAMENT RULE #1: Do NOT press the giant red button labeled DO NOT PRESS THIS BUTTON."
+          </p>
+        </div>
+
+        <div class="vs-actions">
+          <button type="button" class="btn-primary" id="btn-vs-fight-now">⚡ FIGHT NOW (SPACE / TAP)</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SCREEN 3: ACTIVE FIGHT ARENA (HUD + CANVAS + DESKTOP/MOBILE CONTROLS)
+         ========================================================================= -->
+    <section id="screen-fight" class="screen-panel" aria-label="Active Fighting Arena" hidden>
+      <!-- Top Fighter Health & Meter HUD -->
+      <div class="fight-hud">
+        <!-- Player 1 HUD -->
+        <div class="hud-fighter hud-p1">
+          <div class="hud-top-row">
+            <div class="hud-mini-portrait" id="hud-p1-portrait"></div>
+            <div class="hud-name-group">
+              <strong id="hud-p1-name">Cluck Norris</strong>
+              <div class="hud-round-dots" id="hud-p1-rounds" aria-label="Player 1 Round Wins"></div>
+            </div>
+            <span class="hud-hp-num" id="hud-p1-hp-text">100%</span>
+          </div>
+          <div class="hp-bar-outer">
+            <div class="hp-bar-fill p1-hp" id="hud-p1-hp-bar" style="width: 100%;"></div>
+          </div>
+          <div class="hud-meters-row">
+            <span class="meter-pill" id="hud-p1-special-status">⚡ CRAZY: READY</span>
+            <span class="meter-pill red-pill" id="hud-p1-red-status">🚨 RED BUTTON: 100%</span>
+          </div>
+        </div>
+
+        <!-- Center Timer, Round & Score Box -->
+        <div class="hud-center">
+          <span class="hud-mode-pill" id="hud-match-label">ARCADE • STAGE 1/6</span>
+          <div class="hud-timer" id="hud-timer">99</div>
+          <div class="hud-score-line" id="hud-score-line">SCORE: 0</div>
+          <div class="hud-quick-btns">
+            <button type="button" class="btn-hud-mini" id="btn-fight-pause" title="Pause Fight (P / Esc)">⏸️ Pause</button>
+            <button type="button" class="btn-hud-mini" id="btn-fight-leave" title="Return to Select Screen">🏠 Exit</button>
+          </div>
+        </div>
+
+        <!-- Player 2 / Challenger HUD -->
+        <div class="hud-fighter hud-p2">
+          <div class="hud-top-row">
+            <span class="hud-hp-num" id="hud-p2-hp-text">100%</span>
+            <div class="hud-name-group right">
+              <strong id="hud-p2-name">Moo Tai</strong>
+              <div class="hud-round-dots" id="hud-p2-rounds" aria-label="Player 2 Round Wins"></div>
+            </div>
+            <div class="hud-mini-portrait" id="hud-p2-portrait"></div>
+          </div>
+          <div class="hp-bar-outer">
+            <div class="hp-bar-fill p2-hp" id="hud-p2-hp-bar" style="width: 100%;"></div>
+          </div>
+          <div class="hud-meters-row right">
+            <span class="meter-pill" id="hud-p2-special-status">⚡ CRAZY: READY</span>
+            <span class="meter-pill red-pill" id="hud-p2-red-status">🚨 RED BUTTON: 100%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Training Mode Options Strip (Shown only in Training Mode) -->
+      <div class="training-strip" id="training-strip" hidden>
+        <div class="training-group">
+          <label for="select-training-ai">Dummy AI:</label>
+          <select id="select-training-ai">
+            <option value="passive">Passive Sandbag (Auto-Regen)</option>
+            <option value="light">Light Sparring AI</option>
+            <option value="counter">Block &amp; Counter AI</option>
+          </select>
+        </div>
+        <label class="training-check">
+          <input type="checkbox" id="check-infinite-meter" checked />
+          <span>Infinite Special &amp; Red Button</span>
+        </label>
+        <button type="button" class="btn-hud-mini" id="btn-training-reset">🔄 Reset Positions &amp; HP</button>
+      </div>
+
+      <!-- Main 16:9 Fight Stage Canvas -->
+      <div class="canvas-stage-box">
+        <canvas id="fight-canvas" width="960" height="540" aria-label="Farm Fighter IV Arena"></canvas>
+      </div>
+
+      <!-- Interactive Control Deck (Touch-Friendly Virtual Joystick + Action Buttons + Giant Red Button) -->
+      <div class="fight-controls-deck" id="fight-controls-deck">
+        <!-- Left Side: Virtual Joystick + Directional Pad -->
+        <div class="joystick-zone">
+          <div class="virtual-joystick-base" id="joystick-base" aria-label="Virtual Movement Joystick">
+            <div class="joystick-dirs">
+              <span class="j-dir j-up">▲ JUMP</span>
+              <span class="j-dir j-left">◀</span>
+              <span class="j-dir j-right">▶</span>
+              <span class="j-dir j-down">▼ GUARD</span>
+            </div>
+            <div class="virtual-joystick-knob" id="joystick-knob"></div>
+          </div>
+
+          <div class="dpad-fallback-btns" aria-label="Directional Buttons">
+            <button type="button" class="dpad-btn" data-dir="left" aria-label="Move Left">◀</button>
+            <div class="dpad-vert">
+              <button type="button" class="dpad-btn" data-dir="up" aria-label="Jump">▲ JUMP</button>
+              <button type="button" class="dpad-btn" data-dir="down" aria-label="Crouch or Block">▼ BLOCK</button>
+            </div>
+            <button type="button" class="dpad-btn" data-dir="right" aria-label="Move Right">▶</button>
+          </div>
+        </div>
+
+        <!-- Center Desktop Control Legend (Visible on wider screens) -->
+        <div class="desktop-keys-legend hide-mobile">
+          <div class="key-col">
+            <strong>PLAYER 1 KEYS</strong>
+            <span><code>WASD</code> Move / Jump / Block</span>
+            <span><code>F</code> Normal • <code>G</code> Crazy • <code>H</code> Red Button</span>
+          </div>
+          <div class="key-col" id="legend-p2-keys">
+            <strong>PLAYER 2 KEYS</strong>
+            <span><code>Arrows</code> Move / Jump / Block</span>
+            <span><code>1</code> Normal • <code>2</code> Crazy • <code>3</code> Red Button</span>
+          </div>
+        </div>
+
+        <!-- Right Side: Normal Attack, Crazy Attack & Giant Red DO NOT PRESS THIS BUTTON -->
+        <div class="action-buttons-zone">
+          <div class="standard-attack-btns">
+            <button type="button" class="atk-btn atk-normal" id="btn-atk-normal">
+              <span class="atk-title">🥊 NORMAL ATTACK</span>
+              <span class="atk-sub">Fast Combo <kbd>F</kbd></span>
+            </button>
+
+            <button type="button" class="atk-btn atk-crazy" id="btn-atk-crazy">
+              <span class="atk-title">⚡ CRAZY ATTACK</span>
+              <span class="atk-sub" id="btn-crazy-move-label">Special Move <kbd>G</kbd></span>
+            </button>
+          </div>
+
+          <button type="button" class="do-not-press-btn" id="btn-do-not-press">
+            <span class="hazard-stripes" aria-hidden="true"></span>
+            <span class="dnp-warning-icon">☢️ WARNING • KEY [H] ☢️</span>
+            <span class="dnp-main-text">DO NOT PRESS THIS BUTTON</span>
+            <span class="dnp-ult-name" id="btn-dnp-ult-label">RAGE CROWING READY</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SCREEN 4: VICTORY / POST-MATCH & LEADERBOARD SUBMISSION
+         ========================================================================= -->
+    <section id="screen-victory" class="screen-panel" aria-label="Match Results and Victory Screen" hidden>
+      <div class="victory-card">
+        <div class="victory-header">
+          <span class="victory-badge" id="victory-mode-badge">TOURNAMENT RESULT</span>
+          <h2 class="victory-callout" id="victory-callout">POULTRY VICTORY!</h2>
+          <p class="victory-subtitle" id="victory-subtitle">Cluck Norris advances to the next bracket!</p>
+        </div>
+
+        <div class="victory-showcase">
+          <div class="victory-portrait" id="victory-portrait"></div>
+          <div class="victory-quote-box">
+            <blockquote id="victory-quote">"You fought the beak, and the beak won."</blockquote>
+            <div class="victory-stats-grid" id="victory-stats-grid">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Leaderboard Submission Strip (Shown on Arcade / Survival run completion or Game Over) -->
+        <div class="victory-submit-box" id="victory-submit-box">
+          <!-- Manual Submission Controls (Displayed ONLY when Auto Save is disabled AND score not yet submitted) -->
+          <div class="submit-row" id="victory-manual-submit">
+            <label for="victory-player-name">🏆 CONTENDER NAME:</label>
+            <input type="text" id="victory-player-name" maxlength="20" placeholder="Enter Name" />
+            <button type="button" class="btn-primary" id="btn-submit-score">📡 SUBMIT TO GLOBAL LEADERBOARD</button>
+          </div>
+
+          <!-- Hall of Fame Celebration (Displayed when Auto Save is enabled, or after manual submit succeeds) -->
+          <div class="victory-hof-confirmation" id="victory-hof-confirmation" hidden>
+            <div class="hof-message" id="victory-hof-message">🏆 Automatically entered into the Farm Fighter Hall of Fame!</div>
+            <div class="hof-rank" id="victory-hof-rank">✅ Registering tournament rankings...</div>
+          </div>
+        </div>
+
+        <div class="victory-actions">
+          <button type="button" class="btn-start-fight" id="btn-victory-next">
+            <span class="start-main" id="btn-victory-next-label">🥊 NEXT CHALLENGER →</span>
+          </button>
+          <div class="victory-secondary-btns">
+            <button type="button" class="nav-btn nav-btn-gold" id="btn-victory-leaderboard">🏆 View Global Leaderboards</button>
+            <button type="button" class="nav-btn" id="btn-victory-select">🐔 Change Fighter / Mode</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= MODAL 1: GLOBAL SQLITE LEADERBOARDS ================= -->
+  <div class="modal-backdrop" id="modal-leaderboards" role="dialog" aria-modal="true" aria-labelledby="lb-modal-title" hidden>
+    <div class="modal-card modal-wide">
+      <div class="modal-header">
+        <div>
+          <h2 id="lb-modal-title">🏆 FARM FIGHTER IV — GLOBAL LEADERBOARDS</h2>
+          <p class="modal-sub">Official International Barnyard Combat Federation SQLite Rankings</p>
+        </div>
+        <button type="button" class="close-btn" data-close-modal="modal-leaderboards">✕</button>
+      </div>
+
+      <!-- 3 Required Leaderboard Category Tabs -->
+      <div class="lb-tabs" role="tablist">
+        <button type="button" class="lb-tab active" data-lb-cat="arcade_score" role="tab" aria-selected="true">
+          🏆 Arcade Mode: Highest Score
+        </button>
+        <button type="button" class="lb-tab" data-lb-cat="survival_streak" role="tab" aria-selected="false">
+          🔥 Survival Mode: Longest Streak
+        </button>
+        <button type="button" class="lb-tab" data-lb-cat="arcade_time" role="tab" aria-selected="false">
+          ⚡ Fastest Arcade Completion: Best Time
+        </button>
+      </div>
+
+      <div class="lb-pref-strip">
+        <label class="auto-save-toggle" for="toggle-auto-save-lb">
+          <input type="checkbox" id="toggle-auto-save-lb" checked />
+          <span>Automatically submit qualifying scores to Global Leaderboards</span>
+        </label>
+      </div>
+
+      <div class="lb-filter-bar">
+        <div class="filter-group">
+          <label for="lb-fighter-filter">Filter by Fighter:</label>
+          <select id="lb-fighter-filter">
+            <option value="all">All 8 Farm Fighters</option>
+            <option value="cluck_norris">🐔 Cluck Norris</option>
+            <option value="moo_tai">🐄 Moo Tai</option>
+            <option value="ham_solo">🐖 Ham Solo</option>
+            <option value="billy_the_kid">🐐 Billy the Kid</option>
+            <option value="woolverine">🐑 Woolverine</option>
+            <option value="quackie_chan">🦆 Quackie Chan</option>
+            <option value="marey_poppins">🐴 Marey Poppins</option>
+            <option value="dalai_llama">🦙 Dalai Llama</option>
+          </select>
+        </div>
+        <button type="button" class="btn-small" id="btn-refresh-lb">🔄 Refresh Rankings</button>
+      </div>
+
+      <div class="lb-table-wrap">
+        <table class="lb-table" aria-label="Global Leaderboard Rankings">
+          <thead>
+            <tr id="lb-thead-row">
+              <th>Rank</th>
+              <th>Contender</th>
+              <th>Fighter</th>
+              <th>Primary Metric</th>
+              <th>Wins / KOs</th>
+              <th>Red Buttons</th>
+              <th>Arena</th>
+            </tr>
+          </thead>
+          <tbody id="lb-tbody">
+            <tr><td colspan="7" class="lb-empty">Loading tournament records...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 2: FIGHTER BIOS & MOVE LISTS ================= -->
+  <div class="modal-backdrop" id="modal-bios" role="dialog" aria-modal="true" aria-labelledby="bios-modal-title" hidden>
+    <div class="modal-card modal-wide">
+      <div class="modal-header">
+        <div>
+          <h2 id="bios-modal-title">📜 OFFICIAL FIGHTER BIOS &amp; SPECIAL MOVE COMPENDIUM</h2>
+          <p class="modal-sub">Verified Competitor Dossiers from the Fourth Barnyard Championship</p>
+        </div>
+        <button type="button" class="close-btn" data-close-modal="modal-bios">✕</button>
+      </div>
+      <div class="bios-grid" id="bios-grid">
+        <!-- Populated dynamically from FIGHTERS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 3: CONTROLS & HOW TO PLAY ================= -->
+  <div class="modal-backdrop" id="modal-controls" role="dialog" aria-modal="true" aria-labelledby="controls-modal-title" hidden>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h2 id="controls-modal-title">🕹️ TOURNAMENT CONTROLS &amp; COMBAT GUIDE</h2>
+          <p class="modal-sub">Easy to learn. Ridiculous to master.</p>
+        </div>
+        <button type="button" class="close-btn" data-close-modal="modal-controls">✕</button>
+      </div>
+
+      <div class="controls-guide-grid">
+        <div class="guide-box">
+          <h3>⌨️ Desktop Player 1</h3>
+          <ul>
+            <li><strong>Move Left / Right:</strong> <kbd>A</kbd> / <kbd>D</kbd></li>
+            <li><strong>Jump:</strong> <kbd>W</kbd></li>
+            <li><strong>Crouch / Guard Block:</strong> <kbd>S</kbd> (or hold away from attacker)</li>
+            <li><strong>Normal Attack:</strong> <kbd>F</kbd> (Fast 3-hit combo, air kick, low sweep)</li>
+            <li><strong>Crazy Attack:</strong> <kbd>G</kbd> (Use with Forward, Back/Down, or Up for all 3 Specials!)</li>
+            <li><strong>DO NOT PRESS THIS BUTTON:</strong> <kbd>H</kbd></li>
+          </ul>
+        </div>
+
+        <div class="guide-box hide-mobile">
+          <h3>⌨️ Desktop Player 2 (Local Versus)</h3>
+          <ul>
+            <li><strong>Move Left / Right:</strong> <kbd>◀</kbd> / <kbd>▶</kbd> Arrow Keys</li>
+            <li><strong>Jump:</strong> <kbd>▲</kbd> Up Arrow</li>
+            <li><strong>Crouch / Guard Block:</strong> <kbd>▼</kbd> Down Arrow</li>
+            <li><strong>Normal Attack:</strong> <kbd>1</kbd> (Top row or Numpad)</li>
+            <li><strong>Crazy Attack:</strong> <kbd>2</kbd> (Top row or Numpad)</li>
+            <li><strong>DO NOT PRESS THIS BUTTON:</strong> <kbd>3</kbd> (Top row or Numpad)</li>
+          </ul>
+        </div>
+
+        <div class="guide-box">
+          <h3>📱 Mobile &amp; Tablet Controls</h3>
+          <ul>
+            <li><strong>Virtual Joystick (Left):</strong> Drag the thumbstick on the left to walk, jump, or crouch-block.</li>
+            <li><strong>Stacked Attack Buttons (Right):</strong> Top button for <strong>Normal Attack</strong> (rapid combos), bottom button for <strong>Crazy Attack</strong> (character specials).</li>
+            <li><strong>Giant Red Button (Bottom):</strong> Literally labeled <strong>DO NOT PRESS THIS BUTTON</strong>. Spans across the bottom for instant chaotic spectacles.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 4: PAUSE OVERLAY ================= -->
+  <div class="modal-backdrop" id="modal-pause" role="dialog" aria-modal="true" aria-labelledby="pause-modal-title" hidden>
+    <div class="modal-card modal-small">
+      <div class="modal-header">
+        <h2 id="pause-modal-title">⏸️ MATCH PAUSED</h2>
+        <button type="button" class="close-btn" id="btn-pause-resume-x">✕</button>
+      </div>
+      <p class="pause-flavor">The referee is wiping corn husks off the mat.</p>
+      <div class="pause-actions">
+        <button type="button" class="btn-primary" id="btn-pause-resume">▶️ RESUME FIGHT</button>
+        <button type="button" class="nav-btn" id="btn-pause-restart">🔄 Restart Match</button>
+        <button type="button" class="nav-btn" id="btn-pause-bios">📜 Fighter Move List</button>
+        <button type="button" class="nav-btn" id="btn-pause-exit">🏠 Return to Character Select</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

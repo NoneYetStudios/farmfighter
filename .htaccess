@@ -1,0 +1,18 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Route /api/* requests to api/index.php
+    RewriteRule ^api/(.*)$ api/index.php [QSA,L]
+    RewriteRule ^api$ api/index.php [QSA,L]
+</IfModule>
+
+# Prevent direct web downloading of SQLite database, key, and log files
+<FilesMatch "\.(sqlite|sqlite3|db|db-wal|db-shm|env|key|log)$">
+    Require all denied
+</FilesMatch>
+
+# Security headers for Apache / LiteSpeed shared hosting
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
